@@ -1,26 +1,31 @@
 extends Node2D
 
-export var speed := 20.0
-export var max_speed := 400
+export var BASE_SCALE = 1.0
 
-var velocity := Vector2(0.0, 0.0)
-var size = 40
+var crosshair:Sprite
+var target_scale = Vector2(BASE_SCALE, BASE_SCALE)
+var target_rotation = 2
 
-# Called when the node enters the scene tree for the first time.
+func _physics_process(delta):
+	crosshair.scale = lerp(crosshair.scale, target_scale, 20 * delta)
+	print(crosshair.rotation)
+	crosshair.rotation = lerp(crosshair.rotation, target_rotation, 20 * delta)
+	#print(crosshair.scale)
+
+
 func _ready():
 	position = Vector2(
 		get_viewport_rect().size.x * 0.5,
 		get_viewport_rect().size.y * 0.5
 	)
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+	crosshair = $crosshair
+	crosshair.scale = Vector2(BASE_SCALE, BASE_SCALE)
+	crosshair.rotation = target_rotation
 
-func _input(event):
-	if event is InputEventKey && event.get_scancode() == KEY_ESCAPE:
-		exit()
-		return
-	if event is InputEventMouseMotion:
-		position = event.position
-
-func exit():
-	var menu = load('res://main_menu.tscn')
-	get_tree().change_scene_to(menu)
+func _process(delta):
+	position = get_global_mouse_position()
+	
+func adjust_size(new_zoom):
+	target_scale = BASE_SCALE * new_zoom
+	target_rotation = new_zoom.x * 2
