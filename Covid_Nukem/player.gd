@@ -4,7 +4,7 @@ export var BASE_SCALE = 1.0
 
 var crosshair:Sprite
 var target_scale = Vector2(BASE_SCALE, BASE_SCALE)
-var target_rotation = 2
+var target_rotation = PI / 2
 
 func _physics_process(delta):
 	crosshair.scale = lerp(crosshair.scale, target_scale, 20 * delta)
@@ -28,4 +28,4 @@ func _process(delta):
 	
 func adjust_size(new_zoom):
 	target_scale = BASE_SCALE * new_zoom
-	target_rotation = new_zoom.x * 2
+	target_rotation = new_zoom.x * PI / 2
