@@ -8,7 +8,7 @@ var target_rotation = PI / 2
 
 func _physics_process(delta):
 	crosshair.scale = lerp(crosshair.scale, target_scale, 20 * delta)
-	print(crosshair.rotation)
+	#print(crosshair.rotation)
 	crosshair.rotation = lerp(crosshair.rotation, target_rotation, 20 * delta)
 	#print(crosshair.scale)
 

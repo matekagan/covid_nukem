@@ -7,10 +7,13 @@ export var camera_move_offset_ratio = 0.1
 var target_camera_position:Vector2
 var target_zoom:Vector2
 var current_zoom_index = 5
+var viruses={}
 
 var camera:Camera
 var player
 
+
+var virus_factory=load('res://virus_factory.tscn').instance()
 
 func _ready():
 	globals.debug = $canvas/label
@@ -18,10 +21,19 @@ func _ready():
 	player = $player
 	target_zoom = Vector2(zoom_levels[current_zoom_index], zoom_levels[current_zoom_index])
 	target_camera_position = camera.position
+	var new_virus=virus_factory.get_wuhan_virus()
+	viruses[new_virus]=virus_factory.get_random_float(0,2)
+	add_child(new_virus)
+
 
 func _process(delta):
 	#debug()
-	
+	#print(viruses)
+	for virus in viruses:
+		viruses[virus]=viruses[virus]-delta
+		if viruses[virus]<=0:
+			create_virus_near_position(virus.position)
+			viruses[virus]=virus_factory.get_random_float(1,10)
 	var new_camera_position = camera.position + get_camera_velocity() * delta
 	camera.position.x = clamp(new_camera_position.x, 0.0, get_viewport_rect().size.x)
 	camera.position.y = clamp(new_camera_position.y, 0.0, get_viewport_rect().size.y)
@@ -40,7 +52,10 @@ func _input(event):
 		handle_mouse_button_event(event)
 
 func handle_mouse_button_event(event):
-	print(zoom_levels[current_zoom_index])
+	#print(zoom_levels[current_zoom_index])
+#	var new_virus:Area2D = virus_factory.get_virus()
+#	add_child(new_virus)
+#	print(new_virus.position)
 	if event.pressed: 
 		if event.button_index == BUTTON_WHEEL_UP:
 			if abs(zoom_levels[current_zoom_index] - camera.zoom.x) < 0.1 * target_zoom.x && current_zoom_index > 0:
@@ -84,9 +99,13 @@ func exit():
 	
 func debug():
 	globals.debug.text = ""
-	globals.debug.text += "MOUSE POSITION (Camera.gd)\nGlobal:" + str(get_global_mouse_position().floor())
-	globals.debug.text += "\nLocal:" + str(get_local_mouse_position().floor())
-	globals.debug.text += "\nViewport:" + str(get_viewport().get_mouse_position().floor()) + "\n"
-	globals.debug.text += "\nCAMERA ZOOM: %4.2f" % camera.zoom.x + "\n"
-	globals.debug.text += "\nCAMERA POS: " + str(camera.position) + "\n"
+	#globals.debug.text += "MOUSE POSITION (Camera.gd)\nGlobal:" + str(get_global_mouse_position().floor())
+	#globals.debug.text += "\nLocal:" + str(get_local_mouse_position().floor())
+	#globals.debug.text += "\nViewport:" + str(get_viewport().get_mouse_position().floor()) + "\n"
+	#globals.debug.text += "\nCAMERA ZOOM: %4.2f" % camera.zoom.x + "\n"
+	#globals.debug.text += "\nCAMERA POS: " + str(camera.position) + "\n"
 	
+func create_virus_near_position(position:Vector2):
+	var new_virus=virus_factory.get_virus_near_position(position)
+	viruses[new_virus]=virus_factory.get_random_float(8,15)
+	add_child(new_virus)
