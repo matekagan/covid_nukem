@@ -7,9 +7,9 @@ export var camera_move_offset_ratio = 0.1
 var target_camera_position:Vector2
 var target_zoom:Vector2
 var current_zoom_index = 5
-var viruses={}
+var viruses=[]
 
-var camera:Camera
+var camera:Camera2D
 var player
 
 
@@ -21,22 +21,16 @@ func _ready():
 	player = $player
 	target_zoom = Vector2(zoom_levels[current_zoom_index], zoom_levels[current_zoom_index])
 	target_camera_position = camera.position
-	var new_virus=virus_factory.get_wuhan_virus()
-	viruses[new_virus]=virus_factory.get_random_float(0,2)
-	add_child(new_virus)
+	virus_init()
+
 
 
 func _process(delta):
 	#debug()
-	#print(viruses)
-	for virus in viruses:
-		viruses[virus]=viruses[virus]-delta
-		if viruses[virus]<=0:
-			create_virus_near_position(virus.position)
-			viruses[virus]=virus_factory.get_random_float(1,10)
 	var new_camera_position = camera.position + get_camera_velocity() * delta
 	camera.position.x = clamp(new_camera_position.x, 0.0, get_viewport_rect().size.x)
 	camera.position.y = clamp(new_camera_position.y, 0.0, get_viewport_rect().size.y)
+	time_virsues_spread_check(delta)
 
 func _physics_process(delta):
 	#pass
@@ -105,7 +99,18 @@ func debug():
 	#globals.debug.text += "\nCAMERA ZOOM: %4.2f" % camera.zoom.x + "\n"
 	#globals.debug.text += "\nCAMERA POS: " + str(camera.position) + "\n"
 	
-func create_virus_near_position(position:Vector2):
-	var new_virus=virus_factory.get_virus_near_position(position)
-	viruses[new_virus]=virus_factory.get_random_float(8,15)
+func virus_init():
+	add_virus_to_game(virus_factory.get_wuhan_virus())
+	for i in range(0,3):
+		add_virus_to_game(virus_factory.get_virus_random_position(viruses))
+	
+func time_virsues_spread_check(delta):
+	for virus in viruses:
+		virus.decrease_time_to_spread(delta)
+		if virus.is_time_to_spread_below_zero():
+			add_virus_to_game(virus_factory.get_virus(virus.position,viruses))
+			virus.set_time_to_spread(virus_factory.get_random_float(5,10))
+	
+func add_virus_to_game(new_virus):
+	viruses.push_back(new_virus)
 	add_child(new_virus)
