@@ -11,6 +11,8 @@ script = ExtResource( 1 )
 [node name="HBox" type="HBoxContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_top = 1.29236
+margin_bottom = 1.29236
 alignment = 1
 
 [node name="MainContainer" type="MarginContainer" parent="HBox"]

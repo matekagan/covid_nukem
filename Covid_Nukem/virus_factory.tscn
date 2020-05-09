@@ -17,7 +17,9 @@ margin_bottom = 717.668
 texture = ExtResource( 2 )
 expand = true
 
-[node name="virus" type="Sprite" parent="."]
+[node name="virus" type="Sprite" parent="." groups=[
+"viruses_group",
+]]
 position = Vector2( 1461.85, 275.25 )
 scale = Vector2( 0.02, 0.02 )
 texture = ExtResource( 3 )

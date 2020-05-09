@@ -7,7 +7,6 @@ export var camera_move_offset_ratio = 0.1
 var target_camera_position:Vector2
 var target_zoom:Vector2
 var current_zoom_index = 5
-var viruses=[]
 
 var camera:Camera2D
 var player
@@ -26,7 +25,7 @@ func _ready():
 
 
 func _process(delta):
-	#debug()
+	debug()
 	var new_camera_position = camera.position + get_camera_velocity() * delta
 	camera.position.x = clamp(new_camera_position.x, 0.0, get_viewport_rect().size.x)
 	camera.position.y = clamp(new_camera_position.y, 0.0, get_viewport_rect().size.y)
@@ -93,6 +92,7 @@ func exit():
 	
 func debug():
 	globals.debug.text = ""
+	globals.debug.text += "viruses_size = " + String(get_tree().get_nodes_in_group("viruses_group").size())
 	#globals.debug.text += "MOUSE POSITION (Camera.gd)\nGlobal:" + str(get_global_mouse_position().floor())
 	#globals.debug.text += "\nLocal:" + str(get_local_mouse_position().floor())
 	#globals.debug.text += "\nViewport:" + str(get_viewport().get_mouse_position().floor()) + "\n"
@@ -101,16 +101,16 @@ func debug():
 	
 func virus_init():
 	add_virus_to_game(virus_factory.get_wuhan_virus())
-	for i in range(0,3):
-		add_virus_to_game(virus_factory.get_virus_random_position(viruses))
+	#for i in range(0,3):
+	#	add_virus_to_game(virus_factory.get_virus_random_position(get_tree().get_nodes_in_group("viruses_group")))
 	
 func time_virsues_spread_check(delta):
+	var viruses = get_tree().get_nodes_in_group("viruses_group")
+	var randomTime = virus_factory.get_random_float(5,10)
 	for virus in viruses:
-		virus.decrease_time_to_spread(delta)
 		if virus.is_time_to_spread_below_zero():
 			add_virus_to_game(virus_factory.get_virus(virus.position,viruses))
-			virus.set_time_to_spread(virus_factory.get_random_float(5,10))
+			virus.set_time_to_spread(randomTime)
 	
 func add_virus_to_game(new_virus):
-	viruses.push_back(new_virus)
 	add_child(new_virus)
