@@ -11,9 +11,6 @@ var current_zoom_index = 5
 var camera:Camera2D
 var player
 
-
-var virus_factory=load('res://virus_factory.tscn').instance()
-
 func _ready():
 	globals.debug = $canvas/label
 	camera = $camera
@@ -21,8 +18,6 @@ func _ready():
 	target_zoom = Vector2(zoom_levels[current_zoom_index], zoom_levels[current_zoom_index])
 	target_camera_position = camera.position
 	virus_init()
-
-
 
 func _process(delta):
 	debug()
@@ -92,7 +87,7 @@ func exit():
 	
 func debug():
 	globals.debug.text = ""
-	globals.debug.text += "viruses_size = " + String(get_tree().get_nodes_in_group("viruses_group").size())
+	#globals.debug.text += "viruses_size = " + String(get_tree().get_nodes_in_group("viruses_group").size())
 	#globals.debug.text += "MOUSE POSITION (Camera.gd)\nGlobal:" + str(get_global_mouse_position().floor())
 	#globals.debug.text += "\nLocal:" + str(get_local_mouse_position().floor())
 	#globals.debug.text += "\nViewport:" + str(get_viewport().get_mouse_position().floor()) + "\n"
@@ -100,16 +95,16 @@ func debug():
 	#globals.debug.text += "\nCAMERA POS: " + str(camera.position) + "\n"
 	
 func virus_init():
-	add_virus_to_game(virus_factory.get_wuhan_virus())
+	add_virus_to_game($virus_factory.get_wuhan_virus())
 	#for i in range(0,3):
 	#	add_virus_to_game(virus_factory.get_virus_random_position(get_tree().get_nodes_in_group("viruses_group")))
 	
 func time_virsues_spread_check(delta):
 	var viruses = get_tree().get_nodes_in_group("viruses_group")
-	var randomTime = virus_factory.get_random_float(5,10)
+	var randomTime = $virus_factory.get_random_float(5,10)
 	for virus in viruses:
 		if virus.is_time_to_spread_below_zero():
-			add_virus_to_game(virus_factory.get_virus(virus.position,viruses))
+			add_virus_to_game($virus_factory.get_virus(virus.position,viruses))
 			virus.set_time_to_spread(randomTime)
 	
 func add_virus_to_game(new_virus):

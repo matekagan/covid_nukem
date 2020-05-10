@@ -7,10 +7,13 @@ var wuhan_position=Vector2(995,223)
 var rng = RandomNumberGenerator.new()
 var white_bitmap_pixel="000000"
 var NEAR_RADIUS=Vector2(400, 400)
-var MAP_DATA: Image
+var MAP_DATA
+var virus_object = load("virus.tscn")
 
 func _ready():
+	MAP_DATA = $mask.get_texture().get_data()
 	rng.randomize()
+
 
 func get_virus(position,viruses):
 	if rng.randi_range(0,10)<=6:
@@ -29,7 +32,7 @@ func get_virus_near_position(position:Vector2,viruses):
 	return new_virus
 	
 func get_virus_without_position():
-	var new_virus = get_node("virus").duplicate()
+	var new_virus = virus_object.instance()
 	new_virus.set_time_to_spread(get_random_float(7, 10))
 	return new_virus
 	
@@ -37,13 +40,16 @@ func get_virus_without_position():
 func get_random_position_on_land_near_position(position:Vector2, near:Vector2, viruses):
 	var new_pos=get_random_vector_near(position, near)
 	#all check
-	MAP_DATA = get_node("map").get_texture().get_data()
 	MAP_DATA.lock()
-	while check_if_is_point_on_land(new_pos) || !check_new_pos_overlap_existing(new_pos,viruses):
-		new_pos=get_random_vector()
-	MAP_DATA.unlock()
+	#while check_if_is_point_on_land(new_pos) || !check_new_pos_overlap_existing(new_pos,viruses):
+	#	new_pos=get_random_vector()
+	#MAP_DATA.unlock()
 	#land only
 	#while check_if_is_point_on_land(new_pos):
+	#	new_pos=get_random_vector()
+	
+	#neighbours only
+	#while !check_new_pos_overlap_existing(new_pos, viruses):
 	#	new_pos=get_random_vector()
 	
 	#print("przeszlo")
@@ -85,7 +91,7 @@ func check_new_pos_overlap_existing(new_pos,viruses):
 	return true
 	
 func get_wuhan_virus():
-	var new_virus = get_node("virus").duplicate()
+	var new_virus = virus_object.instance()
 	new_virus.position=wuhan_position
 	return new_virus
 	
