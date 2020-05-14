@@ -11,6 +11,8 @@ var current_zoom_index = 5
 var camera:Camera2D
 var player
 
+var max_virsues_count=100
+
 func _ready():
 	globals.debug = $canvas/label
 	camera = $camera
@@ -98,9 +100,12 @@ func virus_init():
 func time_virsues_spread_check(delta):
 	var viruses = get_tree().get_nodes_in_group("viruses_group")
 	var randomTime = $virus_factory.get_random_float(5,10)
+	var viruses_count=viruses.size()
 	for virus in viruses:
 		if virus.is_time_to_spread_below_zero():
-			add_virus_to_game($virus_factory.get_virus(virus.position,viruses))
+			if(viruses_count<max_virsues_count):
+				add_virus_to_game($virus_factory.get_virus(virus.position,viruses))
+				viruses_count+=1
 			virus.set_time_to_spread(randomTime)
 	
 func add_virus_to_game(new_virus):

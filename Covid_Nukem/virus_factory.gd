@@ -61,7 +61,12 @@ func get_random_vector():
 	
 
 func get_random_vector_near(position:Vector2, near:Vector2):
-	return Vector2(get_random_float(position.x - near.x, position.x + near.x), get_random_float(position.y - near.y, position.y + near.y))
+	var min_position_width=position.x - near.x if position.x - near.x>mask_start.x else mask_start.x
+	var max_position_width=position.x + near.x if position.x + near.x<mask_end.x else mask_end.x
+	var min_position_height=position.y - near.y if position.y - near.y>mask_start.y else mask_start.y
+	var max_position_height=position.y + near.y if position.y + near.y<mask_end.y else mask_end.y
+	
+	return Vector2(get_random_float(min_position_width,max_position_width), get_random_float(min_position_height,max_position_height))
 	
 	
 func vector_to_original_map_scale(position: Vector2):
