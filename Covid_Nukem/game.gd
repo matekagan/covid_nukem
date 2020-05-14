@@ -1,6 +1,7 @@
 extends Node2D
 
 const zoom_levels = [0.05, 0.1, 0.25, 0.5, 0.75, 1]
+const SELECTION_RANGE = 25
 export var max_camera_speed = 2000
 export var camera_move_offset_ratio = 0.1
 
@@ -56,7 +57,16 @@ func handle_mouse_button_event(event):
 				target_zoom = Vector2(zoom_levels[current_zoom_index],zoom_levels[current_zoom_index])
 				target_camera_position -= get_local_mouse_position() * 0.4
 				player.adjust_size(target_zoom)
+		elif event.button_index == BUTTON_LEFT:
+			print("clicked", event.position)
+			hadle_mouse_click(event)
 
+func hadle_mouse_click(event):
+	for node in get_tree().get_nodes_in_group("viruses_group"):
+		if get_global_mouse_position().distance_to(node.position) < SELECTION_RANGE:
+			print("virus destroyed")
+			node.queue_free()
+			player.increment_score(node.infected)
 
 func get_camera_velocity():
 	var viewport_size = get_viewport_rect().size
@@ -85,12 +95,14 @@ func exit():
 	
 func debug():
 	globals.debug.text = ""
-	#globals.debug.text += "viruses_size = " + String(get_tree().get_nodes_in_group("viruses_group").size())
-	#globals.debug.text += "MOUSE POSITION (Camera.gd)\nGlobal:" + str(get_global_mouse_position().floor())
-	#globals.debug.text += "\nLocal:" + str(get_local_mouse_position().floor())
-	#globals.debug.text += "\nViewport:" + str(get_viewport().get_mouse_position().floor()) + "\n"
-	#globals.debug.text += "\nCAMERA ZOOM: %4.2f" % camera.zoom.x + "\n"
-	#globals.debug.text += "\nCAMERA POS: " + str(camera.position) + "\n"
+	globals.debug.text += "viruses_size = " + String(get_tree().get_nodes_in_group("viruses_group").size())  + "\n"
+	globals.debug.text += "MOUSE POSITION (Camera.gd)\nGlobal:" + str(get_global_mouse_position().floor())
+	globals.debug.text += "\nLocal:" + str(get_local_mouse_position().floor())
+	globals.debug.text += "\nViewport:" + str(get_viewport().get_mouse_position().floor()) + "\n"
+	globals.debug.text += "\nCAMERA ZOOM: %4.2f" % camera.zoom.x + "\n"
+	globals.debug.text += "\nCAMERA POS: " + str(camera.position) + "\n"
+	
+	globals.debug.text += "\n\nSCORE: " + str(player.score) + "\n"
 	
 func virus_init():
 	add_virus_to_game($virus_factory.get_wuhan_virus())
