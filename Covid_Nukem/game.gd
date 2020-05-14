@@ -40,10 +40,6 @@ func _input(event):
 		handle_mouse_button_event(event)
 
 func handle_mouse_button_event(event):
-	#print(zoom_levels[current_zoom_index])
-#	var new_virus:Area2D = virus_factory.get_virus()
-#	add_child(new_virus)
-#	print(new_virus.position)
 	if event.pressed: 
 		if event.button_index == BUTTON_WHEEL_UP:
 			if abs(zoom_levels[current_zoom_index] - camera.zoom.x) < 0.1 * target_zoom.x && current_zoom_index > 0:

@@ -15,6 +15,7 @@ camera_move_offset_ratio = 0.2
 [node name="virus_factory" parent="." instance=ExtResource( 2 )]
 
 [node name="mask" type="TextureRect" parent="virus_factory"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = 1280.0
