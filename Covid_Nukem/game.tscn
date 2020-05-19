@@ -1,18 +1,22 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://game.gd" type="Script" id=1]
-[ext_resource path="res://virus_factory.tscn" type="PackedScene" id=2]
-[ext_resource path="res://sprites/mask.png" type="Texture" id=3]
-[ext_resource path="res://player.tscn" type="PackedScene" id=4]
-[ext_resource path="res://sprites/map.png" type="Texture" id=5]
-[ext_resource path="res://camera.gd" type="Script" id=6]
+[ext_resource path="res://game_sounds.tscn" type="PackedScene" id=2]
+[ext_resource path="res://virus_factory.tscn" type="PackedScene" id=3]
+[ext_resource path="res://sprites/mask.png" type="Texture" id=4]
+[ext_resource path="res://player.tscn" type="PackedScene" id=5]
+[ext_resource path="res://sprites/map.png" type="Texture" id=6]
+[ext_resource path="res://camera.gd" type="Script" id=7]
 
 [node name="game" type="Node2D"]
 script = ExtResource( 1 )
 max_camera_speed = 2500
 camera_move_offset_ratio = 0.2
 
-[node name="virus_factory" parent="." instance=ExtResource( 2 )]
+[node name="sounds" parent="." instance=ExtResource( 2 )]
+
+[node name="virus_factory" parent="." instance=ExtResource( 3 )]
+editor/display_folded = true
 
 [node name="mask" type="TextureRect" parent="virus_factory"]
 visible = false
@@ -20,13 +24,13 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = 1280.0
 margin_bottom = 720.001
-texture = ExtResource( 3 )
+texture = ExtResource( 4 )
 expand = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="player" parent="." instance=ExtResource( 4 )]
+[node name="player" parent="." instance=ExtResource( 5 )]
 position = Vector2( 292.956, 269.371 )
 z_index = 1
 
@@ -35,7 +39,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = 1280.0
 margin_bottom = 720.001
-texture = ExtResource( 5 )
+texture = ExtResource( 6 )
 expand = true
 __meta__ = {
 "_edit_use_anchors_": false
@@ -45,7 +49,7 @@ __meta__ = {
 position = Vector2( 600, 350 )
 current = true
 zoom = Vector2( 0.25, 0.25 )
-script = ExtResource( 6 )
+script = ExtResource( 7 )
 
 [node name="canvas" type="CanvasLayer" parent="."]
 

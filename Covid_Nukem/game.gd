@@ -62,11 +62,18 @@ func handle_mouse_button_event(event):
 			hadle_mouse_click(event)
 
 func hadle_mouse_click(event):
+	var hit = false
 	for node in get_tree().get_nodes_in_group("viruses_group"):
 		if get_global_mouse_position().distance_to(node.position) < SELECTION_RANGE:
 			print("virus destroyed")
+			hit = true
 			node.queue_free()
 			player.increment_score(node.infected)
+	
+	if (hit):
+		$sounds.play_bomb_hit_sound()
+	else:
+		$sounds.play_bomb_missed_sound()
 
 func get_camera_velocity():
 	var viewport_size = get_viewport_rect().size
