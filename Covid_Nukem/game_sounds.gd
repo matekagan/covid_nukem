@@ -9,3 +9,6 @@ func play_bomb_missed_sound():
 	
 func play_bomb_hit_sound():
 	$success.play()
+	
+func play_explosion():
+	$explosion.play()

@@ -27,18 +27,17 @@ func _process(delta):
 	var new_camera_position = camera.position + get_camera_velocity() * delta
 	camera.position.x = clamp(new_camera_position.x, 0.0, get_viewport_rect().size.x)
 	camera.position.y = clamp(new_camera_position.y, 0.0, get_viewport_rect().size.y)
-	time_virsues_spread_check(delta)
+	time_virsues_spread_check()
+	if (get_tree().get_nodes_in_group("viruses_group").size() == 0):
+		exit()
 
 func _physics_process(delta):
-	#pass
-	#camera.position = lerp(camera.position, target_camera_position, 20 * delta)
-	camera.zoom     = lerp(camera.zoom, target_zoom, 20 * delta)
+	camera.zoom = lerp(camera.zoom, target_zoom, 20 * delta)
 	
 func _input(event):
 	""" Mouse picking """
 	if event is InputEventKey && event.get_scancode() == KEY_ESCAPE:
 		exit()
-		
 	if event is InputEventMouseButton:
 		handle_mouse_button_event(event)
 
@@ -57,11 +56,13 @@ func handle_mouse_button_event(event):
 				target_zoom = Vector2(zoom_levels[current_zoom_index],zoom_levels[current_zoom_index])
 				target_camera_position -= get_local_mouse_position() * 0.4
 				player.adjust_size(target_zoom)
-		elif event.button_index == BUTTON_LEFT:
-			print("clicked", event.position)
-			hadle_mouse_click(event)
+	handlemouse_hold(event)
 
-func hadle_mouse_click(event):
+# warning-ignore:unused_argument
+func hadle_mouse_release():
+	if (!player.loading_bomb):
+		return
+	$sounds.play_explosion()
 	var hit = false
 	for node in get_tree().get_nodes_in_group("viruses_group"):
 		if get_global_mouse_position().distance_to(node.position) < SELECTION_RANGE:
@@ -69,11 +70,19 @@ func hadle_mouse_click(event):
 			hit = true
 			node.queue_free()
 			player.increment_score(node.infected)
-	
+
 	if (hit):
 		$sounds.play_bomb_hit_sound()
 	else:
+		player.increment_score(- player.power)
 		$sounds.play_bomb_missed_sound()
+
+func handlemouse_hold(event):
+	if (event.is_action_pressed("ui_select")):
+		player.start_loading_bomb()
+	elif (event.is_action_released("ui_select")):
+		print("bomb relesed", player.power)
+		hadle_mouse_release()
 
 func get_camera_velocity():
 	var viewport_size = get_viewport_rect().size
@@ -98,8 +107,9 @@ func get_camera_velocity():
 
 func exit():
 	var menu = load('res://main_menu.tscn')
+# warning-ignore:return_value_discarded
 	get_tree().change_scene_to(menu)
-	
+
 func debug():
 	globals.debug.text = ""
 	globals.debug.text += "viruses_size = " + String(get_tree().get_nodes_in_group("viruses_group").size())  + "\n"
@@ -110,13 +120,11 @@ func debug():
 	globals.debug.text += "\nCAMERA POS: " + str(camera.position) + "\n"
 	
 	globals.debug.text += "\n\nSCORE: " + str(player.score) + "\n"
-	
+
 func virus_init():
 	add_virus_to_game($virus_factory.get_wuhan_virus())
-	#for i in range(0,3):
-	#	add_virus_to_game(virus_factory.get_virus_random_position(get_tree().get_nodes_in_group("viruses_group")))
-	
-func time_virsues_spread_check(delta):
+
+func time_virsues_spread_check():
 	var viruses = get_tree().get_nodes_in_group("viruses_group")
 	var randomTime = $virus_factory.get_random_float(5,10)
 	var viruses_count=viruses.size()
