@@ -65,9 +65,13 @@ func hadle_mouse_release():
 		return
 	explosion()
 	$sounds.play_explosion()
+	var bomb_radius=250*player.get_scale().x
+	var bomb_position=player.position;
 	var hit = false
 	for node in get_tree().get_nodes_in_group("viruses_group"):
-		if get_global_mouse_position().distance_to(node.position) < SELECTION_RANGE:
+		var node_radius=250*node.scale.x
+		var distance= bomb_position.distance_to(node.position)
+		if  distance< bomb_radius || distance<node_radius:
 			print("virus destroyed")
 			hit = true
 			node.queue_free()
