@@ -27,6 +27,10 @@ func _ready():
 	crosshair.scale = Vector2(BASE_SCALE, BASE_SCALE)
 	crosshair.rotation = target_rotation
 	$bomb_size.visible = false
+	
+
+func get_scale():
+	return $bomb_size.scale
 
 func _process(delta):
 	position = get_global_mouse_position()

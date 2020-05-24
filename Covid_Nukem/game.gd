@@ -13,6 +13,7 @@ var camera:Camera2D
 var player
 
 var max_virsues_count=100
+var explosion_object = load("res://explosion.tscn")
 
 func _ready():
 	globals.debug = $canvas/label
@@ -62,6 +63,7 @@ func handle_mouse_button_event(event):
 func hadle_mouse_release():
 	if (!player.loading_bomb):
 		return
+	explosion()
 	$sounds.play_explosion()
 	var hit = false
 	for node in get_tree().get_nodes_in_group("viruses_group"):
@@ -135,3 +137,10 @@ func time_virsues_spread_check():
 	
 func add_virus_to_game(new_virus):
 	add_child(new_virus)
+
+
+func explosion():
+	var new_explosion = explosion_object.instance()
+	new_explosion.initalize(player.position, player.get_scale())
+	add_child(new_explosion)
+	new_explosion.play_explosion()
