@@ -85,23 +85,21 @@ func handlemouse_hold(event):
 		hadle_mouse_release()
 
 func get_camera_velocity():
-	var viewport_size = get_viewport_rect().size
-	var mouse_pos = get_viewport().get_mouse_position().floor()
 	var velocity = Vector2(0.0, 0.0)
 	var contant_factor = max_camera_speed * camera.zoom.x
-	var camera_move_offset = viewport_size * camera_move_offset_ratio
 
-	if(mouse_pos.x < camera_move_offset.x):
-		velocity.x -= contant_factor * (1 - (mouse_pos.x / camera_move_offset.x))
 
-	if (mouse_pos.y < camera_move_offset.y):
-		velocity.y -= contant_factor * (1 - (mouse_pos.y / camera_move_offset.y))
+	if Input.is_action_pressed("ui_left"):
+		velocity.x -= contant_factor
 
-	if (mouse_pos.x > viewport_size.x - camera_move_offset.x):
-		velocity.x = contant_factor * (1 - (viewport_size.x - mouse_pos.x) / camera_move_offset.x)
+	if Input.is_action_pressed("ui_right"):
+		velocity.x += contant_factor
 
-	if (mouse_pos.y > viewport_size.y - camera_move_offset.y):
-		velocity.y = contant_factor * (1 - (viewport_size.y - mouse_pos.y) / camera_move_offset.y)
+	if Input.is_action_pressed("ui_up"):
+		velocity.y -= contant_factor
+
+	if Input.is_action_pressed("ui_down"):
+		velocity.y += contant_factor
 
 	return velocity
 
