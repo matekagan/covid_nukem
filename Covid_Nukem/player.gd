@@ -4,7 +4,7 @@ export var BASE_SCALE = 1.0
 
 
 const BASE_POWER = 1000;
-const TIME_TO_CHARGE = 3.0
+const TIME_TO_CHARGE = 1.0
 
 var crosshair:Sprite
 var target_scale = Vector2(BASE_SCALE, BASE_SCALE)
