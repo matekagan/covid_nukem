@@ -9,7 +9,6 @@ const TIME_TO_CHARGE = 3.0
 var crosshair:Sprite
 var target_scale = Vector2(BASE_SCALE, BASE_SCALE)
 var target_rotation = PI / 2
-var score = 0
 var power = 0.0
 var loading_bomb = false
 
@@ -47,8 +46,7 @@ func adjust_size(new_zoom):
 	target_scale = BASE_SCALE * new_zoom
 	target_rotation = new_zoom.x * PI / 2
 
-func increment_score(inc):
-	score += inc
+func finish_bomb_loading():
 	$bomb_size.visible = false
 	
 func start_loading_bomb():

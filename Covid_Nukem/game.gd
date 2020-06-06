@@ -15,6 +15,7 @@ var player
 var max_virsues_count=100
 var max_radius=250
 var explosion_object = load("res://explosion.tscn")
+var final_scene = load("res://final_scene.tscn")
 
 func _ready():
 	globals.debug = $canvas/label
@@ -22,6 +23,7 @@ func _ready():
 	player = $player
 	target_zoom = Vector2(zoom_levels[current_zoom_index], zoom_levels[current_zoom_index])
 	target_camera_position = camera.position
+	game_data.score = 0.0
 	virus_init()
 
 func _process(delta):
@@ -30,8 +32,11 @@ func _process(delta):
 	camera.position.x = clamp(new_camera_position.x, 0.0, get_viewport_rect().size.x)
 	camera.position.y = clamp(new_camera_position.y, 0.0, get_viewport_rect().size.y)
 	time_virsues_spread_check()
-	if (get_tree().get_nodes_in_group("viruses_group").size() == 0):
-		exit()
+	var virus_count = get_tree().get_nodes_in_group("viruses_group").size()
+	if (virus_count== 0):
+		finish(true)
+	elif (virus_count == max_virsues_count):
+		finish(false)
 
 func _physics_process(delta):
 	camera.zoom = lerp(camera.zoom, target_zoom, 20 * delta)
@@ -77,26 +82,26 @@ func hadle_mouse_release():
 		if bomb_radius>=node_radius && bomb_radius-node_radius>=distance:
 			hit=true
 			node.queue_free()
-			player.increment_score(node.infected)
+			game_data.increment_score(node.infected)
 		elif  bomb_radius<=node_radius && node_radius-bomb_radius>=distance:
 				hit=true
 				var per=pow(bomb_radius,2)/pow(node_radius,2)
 				var infected=node.infected*per
 				node.infected=infected
-				player.increment_score(infected)
+				game_data.increment_score(infected)
 		else:
 			var per=abs(bomb_radius-node_radius)/node_radius
 			hit=true
 			var infected=node.infected*per
 			node.infected=infected
-			player.increment_score(infected)
-			
+			game_data.increment_score(infected)
+	player.finish_bomb_loading()
 
 
 	if (hit):
 		$sounds.play_bomb_hit_sound()
 	else:
-		player.increment_score(- player.power)
+		game_data.increment_score(- player.power)
 		$sounds.play_bomb_missed_sound()
 	
 func handlemouse_hold(event):
@@ -127,8 +132,11 @@ func get_camera_velocity():
 
 func exit():
 	var menu = load('res://main_menu.tscn')
-# warning-ignore:return_value_discarded
 	get_tree().change_scene_to(menu)
+
+func finish(success):
+	game_data.is_success = success
+	get_tree().change_scene_to(final_scene)
 
 func debug():
 	globals.debug.text = ""
@@ -138,7 +146,7 @@ func debug():
 	globals.debug.text += "\nViewport:" + str(get_viewport().get_mouse_position().floor()) + "\n"
 	globals.debug.text += "\nCAMERA ZOOM: %4.2f" % camera.zoom.x + "\n"
 	globals.debug.text += "\nCAMERA POS: " + str(camera.position) + "\n"
-	var score=int(player.score/500000)
+	var score=int(game_data.score)
 	globals.debug.text += "\n\nSCORE: " + str(score) + "\n"
 
 func virus_init():
