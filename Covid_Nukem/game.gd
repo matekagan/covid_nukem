@@ -13,6 +13,7 @@ var camera:Camera2D
 var player
 
 var max_virsues_count=100
+var max_radius=250
 var explosion_object = load("res://explosion.tscn")
 
 func _ready():
@@ -65,24 +66,39 @@ func hadle_mouse_release():
 		return
 	explosion()
 	$sounds.play_explosion()
-	var bomb_radius=250*player.get_scale().x
+	var bomb_radius=max_radius*player.get_scale().x
 	var bomb_position=player.position;
 	var hit = false
 	for node in get_tree().get_nodes_in_group("viruses_group"):
-		var node_radius=250*node.scale.x
+		var node_radius=max_radius*node.scale.x
 		var distance= bomb_position.distance_to(node.position)
-		if  distance< bomb_radius || distance<node_radius:
-			print("virus destroyed")
-			hit = true
+		if distance>node_radius+bomb_radius:
+			continue
+		if bomb_radius>=node_radius && bomb_radius-node_radius>=distance:
+			hit=true
 			node.queue_free()
 			player.increment_score(node.infected)
+		elif  bomb_radius<=node_radius && node_radius-bomb_radius>=distance:
+				hit=true
+				var per=pow(bomb_radius,2)/pow(node_radius,2)
+				var infected=node.infected*per
+				node.infected=infected
+				player.increment_score(infected)
+		else:
+			var per=abs(bomb_radius-node_radius)/node_radius
+			hit=true
+			var infected=node.infected*per
+			node.infected=infected
+			player.increment_score(infected)
+			
+
 
 	if (hit):
 		$sounds.play_bomb_hit_sound()
 	else:
 		player.increment_score(- player.power)
 		$sounds.play_bomb_missed_sound()
-
+	
 func handlemouse_hold(event):
 	if (event.is_action_pressed("ui_select")):
 		player.start_loading_bomb()
@@ -129,8 +145,8 @@ func virus_init():
 	var viruses = get_tree().get_nodes_in_group("viruses_group")
 	var wuhan_virus=$virus_factory.get_wuhan_virus()
 	add_virus_to_game(wuhan_virus)
-	for i in range(5):
-	   add_virus_to_game($virus_factory.get_virus(wuhan_virus.position,viruses))
+#	for i in range(5):
+#	   add_virus_to_game($virus_factory.get_virus(wuhan_virus.position,viruses))
 	
 
 func time_virsues_spread_check():
