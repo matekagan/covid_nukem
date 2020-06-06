@@ -145,8 +145,8 @@ func virus_init():
 	var viruses = get_tree().get_nodes_in_group("viruses_group")
 	var wuhan_virus=$virus_factory.get_wuhan_virus()
 	add_virus_to_game(wuhan_virus)
-#	for i in range(5):
-#	   add_virus_to_game($virus_factory.get_virus(wuhan_virus.position,viruses))
+	for i in range(5):
+	   add_virus_to_game($virus_factory.get_virus(wuhan_virus.position,viruses))
 	
 
 func time_virsues_spread_check():
