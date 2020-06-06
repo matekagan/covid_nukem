@@ -15,7 +15,7 @@ func _ready():
 
 func get_virus(position,viruses):
 	var new_virus = virus_object.instance()
-	new_virus.set_time_to_spread(get_random_float(7, 10))
+	new_virus.set_time_to_spread(get_random_float(1, 10))
 	if rng.randi_range(0,10)<=6:
 		new_virus.position=get_virus_near_position(position,viruses)
 	else:

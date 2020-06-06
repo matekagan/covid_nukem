@@ -122,16 +122,21 @@ func debug():
 	globals.debug.text += "\nViewport:" + str(get_viewport().get_mouse_position().floor()) + "\n"
 	globals.debug.text += "\nCAMERA ZOOM: %4.2f" % camera.zoom.x + "\n"
 	globals.debug.text += "\nCAMERA POS: " + str(camera.position) + "\n"
-	
-	globals.debug.text += "\n\nSCORE: " + str(player.score) + "\n"
+	var score=int(player.score/500000)
+	globals.debug.text += "\n\nSCORE: " + str(score) + "\n"
 
 func virus_init():
-	add_virus_to_game($virus_factory.get_wuhan_virus())
+	var viruses = get_tree().get_nodes_in_group("viruses_group")
+	var wuhan_virus=$virus_factory.get_wuhan_virus()
+	add_virus_to_game(wuhan_virus)
+	for i in range(5):
+	   add_virus_to_game($virus_factory.get_virus(wuhan_virus.position,viruses))
+	
 
 func time_virsues_spread_check():
 	var viruses = get_tree().get_nodes_in_group("viruses_group")
-	var randomTime = $virus_factory.get_random_float(5,10)
 	var viruses_count=viruses.size()
+	var randomTime = $virus_factory.get_random_float(1,7)
 	for virus in viruses:
 		if virus.is_time_to_spread_below_zero():
 			if(viruses_count<max_virsues_count):
