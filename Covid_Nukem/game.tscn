@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://game.gd" type="Script" id=1]
 [ext_resource path="res://game_sounds.tscn" type="PackedScene" id=2]
@@ -7,6 +7,13 @@
 [ext_resource path="res://player.tscn" type="PackedScene" id=5]
 [ext_resource path="res://sprites/map.png" type="Texture" id=6]
 [ext_resource path="res://camera.gd" type="Script" id=7]
+
+[sub_resource type="DynamicFontData" id=1]
+font_path = "res://fonts/Magic_Dreams.ttf"
+
+[sub_resource type="DynamicFont" id=2]
+size = 30
+font_data = SubResource( 1 )
 
 [node name="game" type="Node2D"]
 script = ExtResource( 1 )
@@ -54,9 +61,35 @@ script = ExtResource( 7 )
 [node name="canvas" type="CanvasLayer" parent="."]
 
 [node name="label" type="Label" parent="canvas"]
-margin_left = 12.0
-margin_top = 15.0
-margin_right = 72.0
-margin_bottom = 35.0
+visible = false
+margin_left = 1191.18
+margin_top = 34.8279
+margin_right = 1251.18
+margin_bottom = 54.8279
 custom_colors/font_color = Color( 0.0392157, 0.00392157, 0.00392157, 1 )
 text = "debug"
+
+[node name="ColorRect" type="ColorRect" parent="canvas"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 255.0
+margin_bottom = 95.0
+color = Color( 0.333333, 0.333333, 0.333333, 1 )
+
+[node name="score" type="Label" parent="canvas"]
+margin_left = 10.0
+margin_top = 5.0
+margin_right = 260.0
+margin_bottom = 50.0
+custom_fonts/font = SubResource( 2 )
+text = "Score: "
+valign = 1
+
+[node name="virus_left" type="Label" parent="canvas"]
+margin_left = 10.0
+margin_top = 50.0
+margin_right = 260.0
+margin_bottom = 95.0
+custom_fonts/font = SubResource( 2 )
+text = "Virus remaining: "
+valign = 1

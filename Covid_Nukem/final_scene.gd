@@ -12,8 +12,7 @@ func _ready():
 	$h_box/v_box/h_box_inline/start.connect("button_down", self, "_new_game")
 
 	$background.texture = success_background if game_data.is_success else failure_background
-	var score = floor(game_data.score)
-	$h_box/v_box/score.text = str(score)
+	$h_box/v_box/score.text = game_data.get_score()
 
 func _menu():
 	get_tree().change_scene_to(main_menu)

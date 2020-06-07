@@ -33,6 +33,7 @@ func _process(delta):
 	camera.position.y = clamp(new_camera_position.y, 0.0, get_viewport_rect().size.y)
 	time_virsues_spread_check()
 	var virus_count = get_tree().get_nodes_in_group("viruses_group").size()
+	set_labels(str(virus_count), game_data.get_score())
 	if (virus_count== 0):
 		finish(true)
 	elif (virus_count == max_virsues_count):
@@ -181,3 +182,7 @@ func explosion():
 	new_explosion.initalize(player.position, player.get_scale())
 	add_child(new_explosion)
 	new_explosion.play_explosion()
+	
+func set_labels(virus_count, score):
+	$canvas/score.text = "Score: " + score
+	$canvas/virus_left.text = "Virus remaining: " + virus_count
