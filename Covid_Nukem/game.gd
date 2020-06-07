@@ -82,8 +82,8 @@ func hadle_mouse_release():
 			continue
 		if bomb_radius>=node_radius && bomb_radius-node_radius>=distance:
 			hit=true
-			node.queue_free()
 			game_data.increment_score(node.infected)
+			node.queue_free()
 		elif  bomb_radius<=node_radius && node_radius-bomb_radius>=distance:
 				hit=true
 				var per=pow(bomb_radius,2)/pow(node_radius,2)
