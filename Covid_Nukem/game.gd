@@ -18,7 +18,7 @@ var explosion_object = load("res://explosion.tscn")
 var final_scene = load("res://final_scene.tscn")
 
 func _ready():
-	globals.debug = $canvas/label
+#	globals.debug = $canvas/label
 	camera = $camera
 	player = $player
 	target_zoom = Vector2(zoom_levels[current_zoom_index], zoom_levels[current_zoom_index])
@@ -27,7 +27,7 @@ func _ready():
 	virus_init()
 
 func _process(delta):
-	debug()
+	#debug()
 	var new_camera_position = camera.position + get_camera_velocity() * delta
 	camera.position.x = clamp(new_camera_position.x, 0.0, get_viewport_rect().size.x)
 	camera.position.y = clamp(new_camera_position.y, 0.0, get_viewport_rect().size.y)
@@ -88,8 +88,8 @@ func hadle_mouse_release():
 				hit=true
 				var per=pow(bomb_radius,2)/pow(node_radius,2)
 				var infected=node.infected*per
+				game_data.increment_score(node.infected - infected)
 				node.infected=infected
-				game_data.increment_score(infected)
 		else:
 			var per=1
 			if bomb_radius>node_radius:

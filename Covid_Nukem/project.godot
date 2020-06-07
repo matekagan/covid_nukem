@@ -26,6 +26,7 @@ game_data="*res://game_data.gd"
 
 [debug]
 
+settings/fps/force_fps=120
 settings/stdout/print_fps=true
 
 [display]
