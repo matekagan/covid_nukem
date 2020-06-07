@@ -28,6 +28,8 @@ __meta__ = {
 [node name="HBox" type="HBoxContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_top = 3.26633e-005
+margin_bottom = 6.10352e-005
 alignment = 1
 
 [node name="MainContainer" type="MarginContainer" parent="HBox"]
@@ -36,6 +38,7 @@ margin_right = 790.0
 margin_bottom = 720.0
 
 [node name="Color" type="ColorRect" parent="HBox/MainContainer"]
+modulate = Color( 0.501961, 0.501961, 0.501961, 1 )
 margin_right = 300.0
 margin_bottom = 720.0
 rect_min_size = Vector2( 300, 400 )
@@ -72,3 +75,11 @@ margin_bottom = 295.0
 rect_min_size = Vector2( 0, 40 )
 custom_fonts/font = SubResource( 4 )
 text = "EXIT"
+
+[node name="credits" type="Button" parent="HBox/MainContainer/VBox"]
+margin_top = 305.0
+margin_right = 300.0
+margin_bottom = 345.0
+rect_min_size = Vector2( 0, 40 )
+custom_fonts/font = SubResource( 4 )
+text = "Credits"

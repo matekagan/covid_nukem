@@ -17,7 +17,8 @@ _global_script_class_icons={
 
 config/name="Covid Nukem"
 run/main_scene="res://main_menu.tscn"
-config/icon="res://icon.png"
+config/icon="res://sprites/virus_normalized.png"
+config/auto_accept_quit=false
 
 [autoload]
 
@@ -75,5 +76,5 @@ ui_down={
 
 [rendering]
 
-environment/default_clear_color=Color( 0.87451, 0.976471, 0.976471, 1 )
+environment/default_clear_color=Color( 0.454902, 0.454902, 0.454902, 1 )
 environment/default_environment="res://default_env.tres"
