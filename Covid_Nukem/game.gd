@@ -97,9 +97,9 @@ func hadle_mouse_release():
 			else:
 				per=abs(bomb_radius-node_radius)/node_radius
 			hit=true
-			var infected=node.infected*per
-			node.infected=infected
-			game_data.increment_score(infected)
+			var infected=node.infected
+			node.infected=infected*per
+			game_data.increment_score(infected-node.infected)
 	player.finish_bomb_loading()
 
 
